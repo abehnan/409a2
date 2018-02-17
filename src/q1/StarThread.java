@@ -24,7 +24,6 @@ public class StarThread extends Thread {
         this.c = c;
     }
 
-    @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
     public void run() {
         while (count < c) {
 
