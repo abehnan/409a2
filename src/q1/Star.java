@@ -6,44 +6,83 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Star {
-    private static final DecimalFormat numberFormat = new DecimalFormat("0.000");
+    private static final DecimalFormat numberFormat = new DecimalFormat("0.0##");
     private static final int width = 1920;
     private static final int height = 1080;
     private static final LinkedList<Vertex> polygon = new LinkedList<>();
     private static final BufferedImage img = new BufferedImage(width, height,BufferedImage.TYPE_INT_ARGB);
     private static final Graphics2D g2d = img.createGraphics();
+    private static double scalingFactor = 1;
+
+    // updates scaling factor and midpoints for drawing
+    private static void updateDrawValues() {
+        double yMin = polygon.get(0).getY();
+        double xMin = polygon.get(0).getX();
+        double yMax = polygon.get(0).getY();
+        double xMax = polygon.get(0).getX();
+        for (int i = 1; i < polygon.size(); i++) {
+            if (polygon.get(i).getY() < yMin)
+                yMin = polygon.get(i).getY();
+            if (polygon.get(i).getY() > yMax)
+                yMax = polygon.get(i).getY();
+            if (polygon.get(i).getX() < xMin)
+                xMin = polygon.get(i).getX();
+            if (polygon.get(i).getX() > xMax)
+                xMax = polygon.get(i).getX();
+        }
+        if (xMin < 0) {
+            for (Vertex v : polygon) {
+                v.setX(v.getX() - xMin);
+            }
+        }
+        if (yMin < 0) {
+            for (Vertex v : polygon) {
+                v.setY(v.getY() - yMin);
+            }
+        }
+
+        // debug print all vertices
+        System.out.println("\nupdated vertices: ");
+        for (Vertex v : polygon) {
+            System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
+        }
+        System.out.println();
+
+        double xDiff = xMax - xMin;
+        double yDiff = yMax - yMin;
+        double yScaling = (double) height / yDiff;
+        double xScaling = (double) width / xDiff;
+
+        if (xScaling < yScaling)
+            scalingFactor = xScaling;
+        else
+            scalingFactor = yScaling;
+
+        //debug
+        System.out.println("xDiff: " + xDiff);
+        System.out.println("yDiff: " + yDiff);
+        System.out.println("yScaling: " + yScaling);
+        System.out.println("xScaling: " + xScaling);
+        System.out.println("scalingFactor: " + scalingFactor);
+        System.out.println();
+    }
 
     // draws the polygon to the buffered image and outputs to output.png
     private static void draw() {
-        ArrayList<Color> colors = new ArrayList<>();
-        colors.add(Color.red);
-        colors.add(Color.green);
-        colors.add(Color.orange);
-        colors.add(Color.cyan);
-        colors.add(Color.blue);
-        colors.add(Color.magenta);
-        int j = 0;
-        g2d.setStroke(new BasicStroke(5));
-        for (int i = 0; i < polygon.size()-1; i++) {
-            g2d.setColor(colors.get(j++));
-            g2d.drawLine(
-                    polygon.get(i).getScaledX(),
-                    polygon.get(i).getScaledY(),
-                    polygon.get(i+1).getScaledX(),
-                    polygon.get(i+1).getScaledY()
-            );
+        g2d.setStroke(new BasicStroke(2));
+        g2d.setColor(Color.red);
+        int[] xPoints = new int[6];
+        int[] yPoints = new int[6];
+
+        for(int i = 0; i < polygon.size(); i++) {
+            xPoints[i] = (int) (polygon.get(i).getX()*scalingFactor);
+            yPoints[i] = (int) (polygon.get(i).getY()*scalingFactor);
         }
-        g2d.setColor(colors.get(5));
-        g2d.drawLine(
-                polygon.getLast().getScaledX(),
-                polygon.getLast().getScaledY(),
-                polygon.getFirst().getScaledX(),
-                polygon.getFirst().getScaledY()
-        );
+
+        g2d.drawPolygon(xPoints, yPoints, 6);
 
         // write out image
         File output = new File("output.png");
@@ -63,14 +102,6 @@ public class Star {
         g2d.drawLine(img.getWidth()/2, 0, img.getWidth()/2, img.getHeight());
         // horizontal axis
         g2d.drawLine(0, img.getHeight()/2, img.getWidth(), img.getHeight()/2);
-    }
-
-    public static int getWidth() {
-        return width;
-    }
-
-    public static int getHeight() {
-        return height;
     }
 
     public static LinkedList<Vertex> getPolygon() {
@@ -130,6 +161,7 @@ public class Star {
 
         // output
         initializeImage();
+        updateDrawValues();
         draw();
 
     }
