@@ -44,8 +44,7 @@ public class Star {
             }
         }
 
-        // debug print all vertices
-        System.out.println("\nupdated vertices: ");
+        System.out.println("aligned vertices: ");
         for (Vertex v : polygon) {
             System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
         }
@@ -61,12 +60,63 @@ public class Star {
         else
             scalingFactor = yScaling;
 
+        for (Vertex v : polygon) {
+            v.setX(v.getX() * scalingFactor);
+            v.setY(v.getY() * scalingFactor);
+        }
+        // debug print all vertices
+        System.out.println("scaled vertices: ");
+        for (Vertex v : polygon) {
+            System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
+        }
+        System.out.println();
+        yMin = polygon.get(0).getY();
+        xMin = polygon.get(0).getX();
+        yMax = polygon.get(0).getY();
+        xMax = polygon.get(0).getX();
+        for (int i = 1; i < polygon.size(); i++) {
+            if (polygon.get(i).getY() < yMin)
+                yMin = polygon.get(i).getY();
+            if (polygon.get(i).getY() > yMax)
+                yMax = polygon.get(i).getY();
+            if (polygon.get(i).getX() < xMin)
+                xMin = polygon.get(i).getX();
+            if (polygon.get(i).getX() > xMax)
+                xMax = polygon.get(i).getX();
+        }
+        if (xMax > width) {
+            double divider = (xMax / width);
+            for (Vertex v : polygon) {
+                v.setX(v.getX() / divider);
+            }
+        }
+        if (yMax > height) {
+            double  divider =  (yMax / height);
+            for (Vertex v : polygon) {
+                v.setY(v.getY() / divider);
+            }
+        }
+        // debug print all vertices
+        System.out.println("adjusted vertices: ");
+        for (Vertex v : polygon) {
+            System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
+        }
+        System.out.println();
         //debug
-        System.out.println("xDiff: " + xDiff);
-        System.out.println("yDiff: " + yDiff);
-        System.out.println("yScaling: " + yScaling);
-        System.out.println("xScaling: " + xScaling);
+//        System.out.println("xDiff: " + xDiff);
+//        System.out.println("yDiff: " + yDiff);
+//        System.out.println("yScaling: " + yScaling);
+//        System.out.println("xScaling: " + xScaling);
         System.out.println("scalingFactor: " + scalingFactor);
+        // debug print all vertices
+        System.out.println("scaled vertices: ");
+        for (Vertex v : polygon) {
+            System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
+        }
+//        System.out.println("\nscaled vertices: ");
+//        for (Vertex v : polygon) {
+//            System.out.println("x: " + numberFormat.format(v.getX()*scalingFactor) + " y: " + numberFormat.format(v.getY()*scalingFactor));
+//        }
         System.out.println();
     }
 
@@ -80,8 +130,8 @@ public class Star {
         int[] yPoints = new int[6];
 
         for(int i = 0; i < polygon.size(); i++) {
-            xPoints[i] = (int) (polygon.get(i).getX()*scalingFactor);
-            yPoints[i] = (int) (polygon.get(i).getY()*scalingFactor);
+            xPoints[i] = (int) (polygon.get(i).getX());
+            yPoints[i] = (int) (polygon.get(i).getY());
         }
 
         g2d.fillPolygon(xPoints, yPoints, 6);
@@ -120,6 +170,12 @@ public class Star {
         polygon.add(new Vertex(1.0, -2.0));
         polygon.add(new Vertex(-4.0, -4.0));
         polygon.add(new Vertex(-3.0, -1.0));
+        int multiplier = 10;
+        for (Vertex v : polygon) {
+            v.setX(v.getX() * multiplier);
+            v.setY(v.getY() * multiplier);
+        }
+
 
         // debug print all vertices
         System.out.println("initial vertices: ");
