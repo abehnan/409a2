@@ -9,20 +9,61 @@ import java.text.DecimalFormat;
 import java.util.LinkedList;
 
 public class Star {
-    private static final DecimalFormat numberFormat = new DecimalFormat("0.0##");
+    private static final DecimalFormat numberFormat = new DecimalFormat("0.0000");
     private static final int width = 1920;
     private static final int height = 1080;
     private static final LinkedList<Vertex> polygon = new LinkedList<>();
     private static final BufferedImage img = new BufferedImage(width, height,BufferedImage.TYPE_INT_ARGB);
     private static final Graphics2D g2d = img.createGraphics();
-    private static double scalingFactor = 1;
 
     // updates scaling factor and midpoints for drawing
     private static void updateDrawValues() {
+
+        // get the difference between min/max values for both x/y
         double yMin = polygon.get(0).getY();
         double xMin = polygon.get(0).getX();
         double yMax = polygon.get(0).getY();
         double xMax = polygon.get(0).getX();
+        for (int i = 1; i < polygon.size(); i++) {
+            if (polygon.get(i).getY() < yMin)
+                yMin = polygon.get(i).getY();
+            if (polygon.get(i).getY() > yMax)
+                yMax = polygon.get(i).getY();
+            if (polygon.get(i).getX() < xMin)
+                xMin = polygon.get(i).getX();
+            if (polygon.get(i).getX() > xMax)
+                xMax = polygon.get(i).getX();
+        }
+
+        // choose smallest scaling value
+        double xDiff = xMax - xMin;
+        double yDiff = yMax - yMin;
+        double yScaling = (double) height / yDiff;
+        double xScaling = (double) width / xDiff;
+        double scalingFactor;
+        if (xScaling < yScaling)
+            scalingFactor = xScaling;
+        else
+            scalingFactor = yScaling;
+
+        // scale up the vertices
+        for (Vertex v : polygon) {
+            v.setX(v.getX() * scalingFactor);
+            v.setY(v.getY() * scalingFactor);
+        }
+        // debug
+        System.out.println("scalingFactor: " + scalingFactor);
+        System.out.println("scaled-up vertices: ");
+        for (Vertex v : polygon) {
+            System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
+        }
+        System.out.println();
+
+        // align the vertices with the image
+        yMin = polygon.get(0).getY();
+        xMin = polygon.get(0).getX();
+        yMax = polygon.get(0).getY();
+        xMax = polygon.get(0).getX();
         for (int i = 1; i < polygon.size(); i++) {
             if (polygon.get(i).getY() < yMin)
                 yMin = polygon.get(i).getY();
@@ -44,46 +85,7 @@ public class Star {
             }
         }
 
-        System.out.println("aligned vertices: ");
-        for (Vertex v : polygon) {
-            System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
-        }
-        System.out.println();
-
-        double xDiff = xMax - xMin;
-        double yDiff = yMax - yMin;
-        double yScaling = (double) height / yDiff;
-        double xScaling = (double) width / xDiff;
-
-        if (xScaling < yScaling)
-            scalingFactor = xScaling;
-        else
-            scalingFactor = yScaling;
-
-        for (Vertex v : polygon) {
-            v.setX(v.getX() * scalingFactor);
-            v.setY(v.getY() * scalingFactor);
-        }
-        // debug print all vertices
-        System.out.println("scaled vertices: ");
-        for (Vertex v : polygon) {
-            System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
-        }
-        System.out.println();
-        yMin = polygon.get(0).getY();
-        xMin = polygon.get(0).getX();
-        yMax = polygon.get(0).getY();
-        xMax = polygon.get(0).getX();
-        for (int i = 1; i < polygon.size(); i++) {
-            if (polygon.get(i).getY() < yMin)
-                yMin = polygon.get(i).getY();
-            if (polygon.get(i).getY() > yMax)
-                yMax = polygon.get(i).getY();
-            if (polygon.get(i).getX() < xMin)
-                xMin = polygon.get(i).getX();
-            if (polygon.get(i).getX() > xMax)
-                xMax = polygon.get(i).getX();
-        }
+        // scale down if we had very small vertices and the scaling created huge values
         if (xMax > width) {
             double divider = (xMax / width);
             for (Vertex v : polygon) {
@@ -96,27 +98,12 @@ public class Star {
                 v.setY(v.getY() / divider);
             }
         }
-        // debug print all vertices
-        System.out.println("adjusted vertices: ");
+
+        // debug
+        System.out.println("final vertices: ");
         for (Vertex v : polygon) {
             System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
         }
-        System.out.println();
-        //debug
-//        System.out.println("xDiff: " + xDiff);
-//        System.out.println("yDiff: " + yDiff);
-//        System.out.println("yScaling: " + yScaling);
-//        System.out.println("xScaling: " + xScaling);
-        System.out.println("scalingFactor: " + scalingFactor);
-        // debug print all vertices
-        System.out.println("scaled vertices: ");
-        for (Vertex v : polygon) {
-            System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
-        }
-//        System.out.println("\nscaled vertices: ");
-//        for (Vertex v : polygon) {
-//            System.out.println("x: " + numberFormat.format(v.getX()*scalingFactor) + " y: " + numberFormat.format(v.getY()*scalingFactor));
-//        }
         System.out.println();
     }
 
@@ -170,14 +157,8 @@ public class Star {
         polygon.add(new Vertex(1.0, -2.0));
         polygon.add(new Vertex(-4.0, -4.0));
         polygon.add(new Vertex(-3.0, -1.0));
-        int multiplier = 10;
-        for (Vertex v : polygon) {
-            v.setX(v.getX() * multiplier);
-            v.setY(v.getY() * multiplier);
-        }
 
-
-        // debug print all vertices
+        // debug
         System.out.println("initial vertices: ");
         for (Vertex v : polygon) {
             System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
@@ -198,8 +179,8 @@ public class Star {
             }
         }
 
-        // debug print all vertices
-        System.out.println("\nfinal vertices: ");
+        // debug
+        System.out.println("\nmodified vertices: ");
         for (Vertex v : polygon) {
             System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
         }

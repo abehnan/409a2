@@ -10,7 +10,7 @@ public class StarThread extends Thread {
     private static final LinkedList<Vertex> polygon = Star.getPolygon();
     private final Random rng = new Random();
     private int count = 0;
-    private static final DecimalFormat numberFormat = new DecimalFormat("0.000");
+    private static final DecimalFormat numberFormat = new DecimalFormat("0.0000");
     private static final ReentrantLock[] locks = {
             new ReentrantLock(),
             new ReentrantLock(),
