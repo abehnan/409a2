@@ -19,7 +19,7 @@ public class Star {
     // updates scaling factor and midpoints for drawing
     private static void updateDrawValues() {
 
-        // get the difference between min/max values for both x/y
+        // align the values with the image
         double yMin = polygon.get(0).getY();
         double xMin = polygon.get(0).getX();
         double yMax = polygon.get(0).getY();
@@ -34,17 +34,28 @@ public class Star {
             if (polygon.get(i).getX() > xMax)
                 xMax = polygon.get(i).getX();
         }
+        for (Vertex v : polygon) {
+            v.setX(v.getX() - xMin);
+            v.setY(v.getY() - yMin);
+        }
+        System.out.println("aligned vertices: ");
+        for (Vertex v : polygon) {
+            System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
+        }
+        System.out.println();
 
         // choose smallest scaling value
         double xDiff = xMax - xMin;
         double yDiff = yMax - yMin;
         double yScaling = (double) height / yDiff;
         double xScaling = (double) width / xDiff;
-        double scalingFactor;
-        if (xScaling < yScaling)
-            scalingFactor = xScaling;
-        else
-            scalingFactor = yScaling;
+        double scalingFactor = Math.min(xScaling, yScaling);
+
+        // debug
+        System.out.println("xDiff: " + xDiff);
+        System.out.println("yDiff: " + yDiff);
+        System.out.println("xScaling: " + xScaling);
+        System.out.println("yScaling: " + yScaling);
 
         // scale up the vertices
         for (Vertex v : polygon) {
@@ -59,45 +70,6 @@ public class Star {
         }
         System.out.println();
 
-        // align the vertices with the image
-        yMin = polygon.get(0).getY();
-        xMin = polygon.get(0).getX();
-        yMax = polygon.get(0).getY();
-        xMax = polygon.get(0).getX();
-        for (int i = 1; i < polygon.size(); i++) {
-            if (polygon.get(i).getY() < yMin)
-                yMin = polygon.get(i).getY();
-            if (polygon.get(i).getY() > yMax)
-                yMax = polygon.get(i).getY();
-            if (polygon.get(i).getX() < xMin)
-                xMin = polygon.get(i).getX();
-            if (polygon.get(i).getX() > xMax)
-                xMax = polygon.get(i).getX();
-        }
-        if (xMin < 0) {
-            for (Vertex v : polygon) {
-                v.setX(v.getX() - xMin);
-            }
-        }
-        if (yMin < 0) {
-            for (Vertex v : polygon) {
-                v.setY(v.getY() - yMin);
-            }
-        }
-
-        // scale down if we had very small vertices and the scaling created huge values
-        if (xMax > width) {
-            double divider = (xMax / width);
-            for (Vertex v : polygon) {
-                v.setX(v.getX() / divider);
-            }
-        }
-        if (yMax > height) {
-            double  divider =  (yMax / height);
-            for (Vertex v : polygon) {
-                v.setY(v.getY() / divider);
-            }
-        }
 
         // debug
         System.out.println("final vertices: ");
