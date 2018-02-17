@@ -16,7 +16,7 @@ public class Star {
     private static final BufferedImage img = new BufferedImage(width, height,BufferedImage.TYPE_INT_ARGB);
     private static final Graphics2D g2d = img.createGraphics();
 
-    // updates scaling factor and midpoints for drawing
+    // updates the vertices before drawing
     private static void updateDrawValues() {
 
         // align the values with the image
@@ -81,6 +81,7 @@ public class Star {
 
     // draws the polygon to the buffered image and outputs to output.png
     private static void draw() {
+        updateDrawValues();
         g2d.setPaint(Color.white);
         g2d.fillRect(0, 0, img.getWidth(), img.getHeight());
         g2d.setStroke(new BasicStroke(3));
@@ -159,7 +160,6 @@ public class Star {
         System.out.println();
 
         // output
-        updateDrawValues();
         draw();
 
     }
