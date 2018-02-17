@@ -5,19 +5,27 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Star {
+    private static final DecimalFormat numberFormat = new DecimalFormat("0.000");
     private static final int width = 1920;
     private static final int height = 1080;
     private static final LinkedList<Vertex> polygon = new LinkedList<>();
     private static final BufferedImage img = new BufferedImage(width, height,BufferedImage.TYPE_INT_ARGB);
     private static final Graphics2D g2d = img.createGraphics();
-    private static final ArrayList<Color> colors = new ArrayList<>();
 
     // draws the polygon to the buffered image and outputs to output.png
     private static void draw() {
+        ArrayList<Color> colors = new ArrayList<>();
+        colors.add(Color.red);
+        colors.add(Color.green);
+        colors.add(Color.orange);
+        colors.add(Color.cyan);
+        colors.add(Color.blue);
+        colors.add(Color.magenta);
         int j = 0;
         g2d.setStroke(new BasicStroke(5));
         for (int i = 0; i < polygon.size()-1; i++) {
@@ -50,7 +58,6 @@ public class Star {
     private static void initializeImage() {
         g2d.setPaint(Color.white);
         g2d.fillRect(0, 0, img.getWidth(), img.getHeight());
-
         g2d.setColor(Color.black);
         // vertical axis
         g2d.drawLine(img.getWidth()/2, 0, img.getWidth()/2, img.getHeight());
@@ -92,18 +99,11 @@ public class Star {
         polygon.add(new Vertex(1.0, -2.0));
         polygon.add(new Vertex(-4.0, -4.0));
         polygon.add(new Vertex(-3.0, -1.0));
-        // colors to represent edges of polygon
-        colors.add(Color.red);
-        colors.add(Color.green);
-        colors.add(Color.orange);
-        colors.add(Color.cyan);
-        colors.add(Color.blue);
-        colors.add(Color.magenta);
 
         // debug print all vertices
         System.out.println("initial vertices: ");
         for (Vertex v : polygon) {
-            System.out.println("x: " + v.getX() + " y: " + v.getY());
+            System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
         }
         System.out.println();
 
@@ -122,10 +122,11 @@ public class Star {
         }
 
         // debug print all vertices
-        System.out.println("\nfinal vertices (scaled to 1080p):");
+        System.out.println("\nfinal vertices: ");
         for (Vertex v : polygon) {
-            System.out.println("x: " + v.getX() + " y: " + v.getY());
+            System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
         }
+        System.out.println();
 
         // output
         initializeImage();

@@ -1,5 +1,6 @@
 package q1;
 
+import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -8,11 +9,13 @@ public class StarThread extends Thread {
     private static final LinkedList<Vertex> polygon = Star.getPolygon();
     private final Random rng = new Random();
     private int count = 0;
+    private static final DecimalFormat numberFormat = new DecimalFormat("0.000");
 
     StarThread(int c) {
         this.c = c;
     }
 
+    @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
     public void run() {
         while (count < c) {
 
@@ -41,14 +44,22 @@ public class StarThread extends Thread {
                 // source: https://stackoverflow.com/questions/19654251/random-point-inside-triangle-inside-java
                 double r1 = rng.nextDouble();
                 double r2 = rng.nextDouble();
-                double x = (1 - Math.sqrt(r1)) * A.getX() +
+                double x =
+                        (1 - Math.sqrt(r1)) * A.getX() +
                         (Math.sqrt(r1) * (1 - r2)) * B.getX() +
                         (Math.sqrt(r1) *r2) * C.getX();
-                double y = (1 - Math.sqrt(r1)) * A.getY() +
+                double y =
+                        (1 - Math.sqrt(r1)) * A.getY() +
                         (Math.sqrt(r1) * (1 - r2)) * B.getY() +
                         (Math.sqrt(r1) *r2) * C.getY();
+
                 // debug
-                System.out.println("vertex (" + A.getX() + ", " + A.getY() + ") is being changed to (" + x + ", " + y +")");
+                System.out.println(
+                    "vertex (" + numberFormat.format(A.getX()) + ", " + numberFormat.format(A.getY()) +
+                    ") is being changed to (" + numberFormat.format(x) + ", " + numberFormat.format(y) + ")"
+                );
+
+
                 A.setX(x);
                 A.setY(y);
                 count++;
