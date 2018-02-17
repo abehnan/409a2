@@ -72,8 +72,10 @@ public class Star {
 
     // draws the polygon to the buffered image and outputs to output.png
     private static void draw() {
-        g2d.setStroke(new BasicStroke(2));
-        g2d.setColor(Color.red);
+        g2d.setPaint(Color.white);
+        g2d.fillRect(0, 0, img.getWidth(), img.getHeight());
+        g2d.setStroke(new BasicStroke(3));
+        g2d.setColor(Color.darkGray);
         int[] xPoints = new int[6];
         int[] yPoints = new int[6];
 
@@ -82,8 +84,7 @@ public class Star {
             yPoints[i] = (int) (polygon.get(i).getY()*scalingFactor);
         }
 
-        g2d.drawPolygon(xPoints, yPoints, 6);
-
+        g2d.fillPolygon(xPoints, yPoints, 6);
         // write out image
         File output = new File("output.png");
         try {
@@ -91,17 +92,6 @@ public class Star {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    // initializes our image with the axis representing a graph.
-    private static void initializeImage() {
-        g2d.setPaint(Color.white);
-        g2d.fillRect(0, 0, img.getWidth(), img.getHeight());
-        g2d.setColor(Color.black);
-        // vertical axis
-        g2d.drawLine(img.getWidth()/2, 0, img.getWidth()/2, img.getHeight());
-        // horizontal axis
-        g2d.drawLine(0, img.getHeight()/2, img.getWidth(), img.getHeight()/2);
     }
 
     public static LinkedList<Vertex> getPolygon() {
@@ -160,7 +150,6 @@ public class Star {
         System.out.println();
 
         // output
-        initializeImage();
         updateDrawValues();
         draw();
 
