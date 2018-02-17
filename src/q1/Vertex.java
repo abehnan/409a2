@@ -35,7 +35,4 @@ public class Vertex {
         this.y = y;
     }
 
-    public boolean equals(Vertex v) {
-        return (this.x == v.getX()) && (this.y == v.getY());
-    }
 }

@@ -5,8 +5,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Random;
 
 public class Star {
     private static final int width = 1920;
@@ -14,14 +14,14 @@ public class Star {
     private static final LinkedList<Vertex> polygon = new LinkedList<>();
     private static final BufferedImage img = new BufferedImage(width, height,BufferedImage.TYPE_INT_ARGB);
     private static final Graphics2D g2d = img.createGraphics();
+    private static final ArrayList<Color> colors = new ArrayList<>();
 
     // draws the polygon to the buffered image and outputs to output.png
     private static void draw() {
-
-        g2d.setColor(Color.red);
+        int j = 0;
         g2d.setStroke(new BasicStroke(5));
-
         for (int i = 0; i < polygon.size()-1; i++) {
+            g2d.setColor(colors.get(j++));
             g2d.drawLine(
                     polygon.get(i).getScaledX(),
                     polygon.get(i).getScaledY(),
@@ -29,6 +29,7 @@ public class Star {
                     polygon.get(i+1).getScaledY()
             );
         }
+        g2d.setColor(colors.get(5));
         g2d.drawLine(
                 polygon.getLast().getScaledX(),
                 polygon.getLast().getScaledY(),
@@ -65,7 +66,24 @@ public class Star {
         return height;
     }
 
+    public static LinkedList<Vertex> getPolygon() {
+        return polygon;
+    }
+
     public static void main(String[] args) {
+        int c = -1, m = -1;
+        try {
+            if (args.length<2)
+                throw new Exception("Missing arguments, only "+args.length+" were specified!");
+            m = Integer.parseInt(args[0]);
+            c = Integer.parseInt(args[1]);
+            if (m > 6 || m < 1)
+                throw new Exception("m must be an integer between 1 and 6");
+            else if (c < 0)
+                throw new Exception("c must be a positive integer");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // hard coded polygon
         polygon.add(new Vertex(-1.0, 5.0));
@@ -74,54 +92,42 @@ public class Star {
         polygon.add(new Vertex(1.0, -2.0));
         polygon.add(new Vertex(-4.0, -4.0));
         polygon.add(new Vertex(-3.0, -1.0));
+        // colors to represent edges of polygon
+        colors.add(Color.red);
+        colors.add(Color.green);
+        colors.add(Color.orange);
+        colors.add(Color.cyan);
+        colors.add(Color.blue);
+        colors.add(Color.magenta);
 
         // debug print all vertices
+        System.out.println("initial vertices: ");
         for (Vertex v : polygon) {
-            System.out.println("x: " + v.getScaledX() + " y: " + v.getScaledY());
+            System.out.println("x: " + v.getX() + " y: " + v.getY());
         }
         System.out.println();
 
-        // single-threaded test
-        Random rng = new Random();
-        Vertex A, B, C;
-        int iterations = 10;
-
-        for (int i = 0; i < iterations; i++) {
-
-            int index = rng.nextInt(polygon.size());
-            A = polygon.get(index);
-            if (index == 0) {
-                B = polygon.get(index + 1);
-                C = polygon.get(polygon.size()-1);
+        // start and join the threads
+        StarThread[] threads = new StarThread[m];
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new StarThread(c);
+            threads[i].start();
+        }
+        for (StarThread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            else if (index == polygon.size() - 1) {
-                B = polygon.get(0);
-                C = polygon.get(polygon.size() - 2);
-            }
-            else {
-                B = polygon.get(index + 1);
-                C = polygon.get(index - 1);
-            }
-            double r1 = rng.nextDouble();
-            double r2 = rng.nextDouble();
-            // code for finding a random point in a triangle was found on stackoverflow
-            // source: https://stackoverflow.com/questions/19654251/random-point-inside-triangle-inside-java
-            double x = (1 - Math.sqrt(r1)) * A.getX() +
-                    (Math.sqrt(r1) * (1 - r2)) * B.getX() +
-                    (Math.sqrt(r1) *r2) * C.getX();
-            double y = (1 - Math.sqrt(r1)) * A.getY() +
-                    (Math.sqrt(r1) * (1 - r2)) * B.getY() +
-                    (Math.sqrt(r1) *r2) * C.getY();
-            System.out.println("vertex (" + A.getX() + ", " + A.getY() + ") is being changed to (" + x + ", " + y +")");
-            A.setX(x);
-            A.setY(y);
         }
 
         // debug print all vertices
-        System.out.println("\nfinal vertices:");
+        System.out.println("\nfinal vertices (scaled to 1080p):");
         for (Vertex v : polygon) {
-            System.out.println("x: " + v.getScaledX() + " y: " + v.getScaledY());
+            System.out.println("x: " + v.getX() + " y: " + v.getY());
         }
+
+        // output
         initializeImage();
         draw();
 
