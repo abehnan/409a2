@@ -64,15 +64,7 @@ public class Star {
         }
         // debug
         System.out.println("scalingFactor: " + scalingFactor);
-        System.out.println("scaled-up vertices: ");
-        for (Vertex v : polygon) {
-            System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
-        }
-        System.out.println();
-
-
-        // debug
-        System.out.println("final vertices: ");
+        System.out.println("\nscaled-up vertices: ");
         for (Vertex v : polygon) {
             System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
         }
