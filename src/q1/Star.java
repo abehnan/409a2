@@ -74,7 +74,7 @@ class Star {
     // draws the polygon to the buffered image and outputs to output.png
     private static void draw() {
         updateDrawValues();
-        g2d.setPaint(Color.white);
+        g2d.setColor(Color.lightGray);
         g2d.fillRect(0, 0, img.getWidth(), img.getHeight());
         g2d.setStroke(new BasicStroke(3));
         g2d.setColor(Color.darkGray);
