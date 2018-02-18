@@ -1,15 +1,15 @@
 package q2;
 
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class CatRobot extends Thread {
-    private final AtomicInteger cats = CatMaker.getCats();
+class CatRobot extends Thread {
     private final FiniteBin fullHeads = CatMaker.getFullHeads();
     private final FiniteBin fullBodies = CatMaker.getFullBodies();
+    private final int limit = CatMaker.getLimit();
+    private int cats = 0;
 
     public void run() {
-        while(cats.get() < CatMaker.getLimit()) {
+        while(cats < limit) {
             synchronized (fullBodies) {
                 if (fullBodies.getCount() == 0) {
                     try {
@@ -32,8 +32,9 @@ public class CatRobot extends Thread {
                 fullHeads.decrement();
                 System.out.println("decremented fullHeads to " + fullHeads.getCount());
             }
-            cats.incrementAndGet();
-            System.out.println("incremented cats to: " + cats.get());
+            cats++;
+            System.out.println("incremented cats to: " + cats);
+
             try {
                 Thread.sleep(ThreadLocalRandom.current().nextLong(10, 20));
             } catch (InterruptedException e) {
@@ -41,5 +42,6 @@ public class CatRobot extends Thread {
             }
 
         }
+        CatMaker.on = false;
     }
 }

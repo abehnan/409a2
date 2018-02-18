@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.LinkedList;
 
-public class Star {
+class Star {
     private static final DecimalFormat numberFormat = new DecimalFormat("0.0000");
     private static final int width = 1920;
     private static final int height = 1080;

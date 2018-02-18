@@ -1,18 +1,16 @@
 package q2;
 
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class TailRobot extends Thread {
+class TailRobot extends Thread {
     private final Object bodies = CatMaker.getBodies();
     private final FiniteBin bodiesWithLegs = CatMaker.getBodiesWithLegs();
     private final FiniteBin bodiesWithTails = CatMaker.getBodiesWithTails();
     private final FiniteBin fullBodies = CatMaker.getFullBodies();
     private final Object tails = CatMaker.getTails();
-    private final AtomicInteger cats = CatMaker.getCats();
 
     public void run() {
-        while(cats.get() < CatMaker.getLimit()) {
+        while(CatMaker.on) {
             boolean bodyWithLegsFound = false;
             synchronized (bodiesWithLegs) {
                 if (bodiesWithLegs.getCount() > 0) {

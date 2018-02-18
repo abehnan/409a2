@@ -3,8 +3,8 @@ package q2;
 public class FiniteBin {
     private int count;
 
-    FiniteBin(int count) {
-        this.count = count;
+    FiniteBin() {
+        this.count = 0;
     }
 
     public int getCount() {
@@ -19,7 +19,4 @@ public class FiniteBin {
         count--;
     }
 
-    public void setCount(int count) {
-        this.count = count;
-    }
 }

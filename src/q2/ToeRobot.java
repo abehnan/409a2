@@ -1,17 +1,15 @@
 package q2;
 
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class ToeRobot extends Thread {
+class ToeRobot extends Thread {
     private final Object legs = CatMaker.getLegs();
     private final Object toes = CatMaker.getToes();
     private final FiniteBin hindLegs = CatMaker.getHindLegs();
     private final FiniteBin foreLegs = CatMaker.getForeLegs();
-    private final AtomicInteger cats = CatMaker.getCats();
 
     public void run() {
-        while (cats.get() < CatMaker.getLimit()) {
+        while (CatMaker.on) {
             // get a leg
             synchronized(legs){}
             // get some 4-5 toes (randomly)

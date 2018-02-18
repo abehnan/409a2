@@ -1,10 +1,8 @@
 package q2;
 
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class WhiskerRobot extends Thread {
-    private final AtomicInteger cats = CatMaker.getCats();
+class WhiskerRobot extends Thread {
     private final Object heads = CatMaker.getHeads();
     private final Object whiskers = CatMaker.getWhiskers();
     private final FiniteBin headsWithEyes = CatMaker.getHeadsWithEyes();
@@ -12,7 +10,7 @@ public class WhiskerRobot extends Thread {
     private final FiniteBin fullHeads = CatMaker.getFullHeads();
 
     public void run() {
-        while (cats.get() < CatMaker.getLimit()) {
+        while (CatMaker.on) {
             boolean headWithEyesFound = false;
             synchronized(headsWithEyes) {
                 if (headsWithEyes.getCount() > 0) {

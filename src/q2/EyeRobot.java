@@ -1,10 +1,8 @@
 package q2;
 
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class EyeRobot extends Thread {
-    private final AtomicInteger cats = CatMaker.getCats();
+class EyeRobot extends Thread {
     private final Object heads = CatMaker.getHeads();
     private final Object eyes = CatMaker.getEyes();
     private final FiniteBin headsWithEyes = CatMaker.getHeadsWithEyes();
@@ -12,7 +10,7 @@ public class EyeRobot extends Thread {
     private final FiniteBin fullHeads = CatMaker.getFullHeads();
 
     public void run() {
-        while (cats.get() < CatMaker.getLimit()) {
+        while (CatMaker.on) {
             boolean headWithWhiskersFound = false;
             synchronized (headsWithWhiskers) {
                 if (headsWithWhiskers.getCount() > 0) {

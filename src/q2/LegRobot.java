@@ -1,19 +1,17 @@
 package q2;
 
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class LegRobot extends Thread{
+class LegRobot extends Thread{
     private final Object bodies = CatMaker.getBodies();
     private final FiniteBin hindLegs = CatMaker.getHindLegs();
     private final FiniteBin foreLegs = CatMaker.getForeLegs();
     private final FiniteBin bodiesWithTails = CatMaker.getBodiesWithTails();
     private final FiniteBin fullBodies = CatMaker.getFullBodies();
     private final FiniteBin bodiesWithLegs = CatMaker.getBodiesWithLegs();
-    private final AtomicInteger cats = CatMaker.getCats();
 
     public void run() {
-        while(cats.get() < CatMaker.getLimit()) {
+        while(CatMaker.on) {
             boolean bodyWithTailsFound = false;
 
             // try to get a body with a tail

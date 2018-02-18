@@ -1,6 +1,6 @@
 package q1;
 
-public class Vertex {
+class Vertex {
     private double x;
     private double y;
 

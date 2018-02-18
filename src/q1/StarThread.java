@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class StarThread extends Thread {
-    private int c;
+class StarThread extends Thread {
+    private final int c;
     private static final LinkedList<Vertex> polygon = Star.getPolygon();
     private final Random rng = new Random();
     private int count = 0;

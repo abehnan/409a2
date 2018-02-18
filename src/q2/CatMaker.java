@@ -1,8 +1,9 @@
 package q2;
 
-import java.util.concurrent.atomic.AtomicInteger;
+class CatMaker {
+    public static boolean on = true;
+    private static final int limit = 250;
 
-public class CatMaker {
     // our infinite bins
     private static final Object legs = new Object();
     private static final Object toes = new Object();
@@ -13,23 +14,19 @@ public class CatMaker {
     private static final Object heads = new Object();
 
     // our finite bins
-    private static final FiniteBin hindLegs = new FiniteBin(0);
-    private static final FiniteBin foreLegs = new FiniteBin(0);
-    private static final FiniteBin headsWithWhiskers = new FiniteBin(0);
-    private static final FiniteBin headsWithEyes = new FiniteBin(0);
-    private static final FiniteBin bodiesWithTails = new FiniteBin(0);
-    private static final FiniteBin bodiesWithLegs = new FiniteBin(0);
-    private static final FiniteBin fullBodies = new FiniteBin(0);
-    private static final FiniteBin fullHeads = new FiniteBin(0);
-
-    private static final int limit = 5;
-    // our counters
-    private static final AtomicInteger cats = new AtomicInteger(0);
-    private static AtomicInteger timeTaken = new AtomicInteger(0);
+    private static final FiniteBin hindLegs = new FiniteBin();
+    private static final FiniteBin foreLegs = new FiniteBin();
+    private static final FiniteBin headsWithWhiskers = new FiniteBin();
+    private static final FiniteBin headsWithEyes = new FiniteBin();
+    private static final FiniteBin bodiesWithTails = new FiniteBin();
+    private static final FiniteBin bodiesWithLegs = new FiniteBin();
+    private static final FiniteBin fullBodies = new FiniteBin();
+    private static final FiniteBin fullHeads = new FiniteBin();
 
     public static int getLimit() {
         return limit;
     }
+
     public static Object getLegs() {
         return legs;
     }
@@ -90,10 +87,6 @@ public class CatMaker {
         return fullHeads;
     }
 
-    public static AtomicInteger getCats() {
-        return cats;
-    }
-
     public static void main(String args[]) {
 
         ToeRobot toeRobot1 = new ToeRobot();
@@ -121,23 +114,14 @@ public class CatMaker {
         catRobot.start();
 
         try {
-            toeRobot1.join();
-            toeRobot2.join();
-            legRobot1.join();
-            legRobot2.join();
-            tailRobot1.join();
-            tailRobot2.join();
-            eyeRobot1.join();
-            eyeRobot2.join();
-            whiskerRobot1.join();
-            whiskerRobot2.join();
             catRobot.join();
+            if (legRobot1.getState() == Thread.State.BLOCKED)
+                legRobot1.interrupt();
+            else if (legRobot2.getState() == Thread.State.BLOCKED)
+                legRobot2.interrupt();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
-
-
     }
 }
