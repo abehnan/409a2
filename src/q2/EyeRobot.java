@@ -10,7 +10,7 @@ class EyeRobot extends Thread {
     private final FiniteBin fullHeads = CatMaker.getFullHeads();
 
     public void run() {
-        while (CatMaker.on) {
+        while (CatMaker.produceCats) {
             boolean headWithWhiskersFound = false;
             synchronized (headsWithWhiskers) {
                 if (headsWithWhiskers.getCount() > 0) {

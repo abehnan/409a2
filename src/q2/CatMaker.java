@@ -1,8 +1,8 @@
 package q2;
 
 class CatMaker {
-    public static volatile boolean on = true;
-    private static final int limit = 25;
+    static volatile boolean produceCats = true;
+    private static final int limit = 250;
 
     // our infinite bins
     private static final Object legs = new Object();
@@ -53,12 +53,6 @@ class CatMaker {
             catRobot.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-        synchronized (hindLegs) {
-            hindLegs.notifyAll();
-        }
-        synchronized (foreLegs) {
-            foreLegs.notifyAll();
         }
     }
 

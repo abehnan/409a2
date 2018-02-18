@@ -10,7 +10,7 @@ class TailRobot extends Thread {
     private final Object tails = CatMaker.getTails();
 
     public void run() {
-        while(CatMaker.on) {
+        while(CatMaker.produceCats) {
             boolean bodyWithLegsFound = false;
             synchronized (bodiesWithLegs) {
                 if (bodiesWithLegs.getCount() > 0) {

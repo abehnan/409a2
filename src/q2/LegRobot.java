@@ -11,7 +11,7 @@ class LegRobot extends Thread{
     private final FiniteBin bodiesWithLegs = CatMaker.getBodiesWithLegs();
 
     public void run() {
-        while(CatMaker.on) {
+        while(CatMaker.produceCats) {
             boolean bodyWithTailsFound = false;
 
             // try to get a body with a tail

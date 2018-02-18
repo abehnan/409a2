@@ -10,7 +10,7 @@ class WhiskerRobot extends Thread {
     private final FiniteBin fullHeads = CatMaker.getFullHeads();
 
     public void run() {
-        while (CatMaker.on) {
+        while (CatMaker.produceCats) {
             boolean headWithEyesFound = false;
             synchronized(headsWithEyes) {
                 if (headsWithEyes.getCount() > 0) {

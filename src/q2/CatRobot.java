@@ -33,7 +33,7 @@ class CatRobot extends Thread {
                 System.out.println("decremented fullHeads to " + fullHeads.getCount());
             }
             cats++;
-            System.out.println("incremented cats to: " + cats);
+            System.out.println("\n~~~~~~~~ incremented cats to " + cats + " ~~~~~~~~\n");
 
             try {
                 Thread.sleep(ThreadLocalRandom.current().nextLong(10, 20));
@@ -42,6 +42,6 @@ class CatRobot extends Thread {
             }
 
         }
-        CatMaker.on = false;
+        CatMaker.produceCats = false;
     }
 }

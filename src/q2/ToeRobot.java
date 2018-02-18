@@ -9,14 +9,14 @@ class ToeRobot extends Thread {
     private final FiniteBin foreLegs = CatMaker.getForeLegs();
 
     public void run() {
-        while (CatMaker.on) {
+        while (CatMaker.produceCats) {
             // get a leg
             synchronized(legs){}
             // get some 4-5 toes (randomly)
             synchronized(toes){}
-            int numToes = ThreadLocalRandom.current().nextInt(4, 6);
+            float rng = ThreadLocalRandom.current().nextFloat();
             // add a foreleg to the bin if we got 4 toes
-            if (numToes == 4) {
+            if (rng < 0.5) {
                 synchronized (foreLegs) {
                     foreLegs.increment();
                     System.out.println("incremented foreLegs to " + foreLegs.getCount());
@@ -25,7 +25,7 @@ class ToeRobot extends Thread {
                 }
             }
             // add a hindleg to the bin if we got 5 toes
-            else if (numToes == 5) {
+            else {
                 synchronized (hindLegs) {
                     hindLegs.increment();
                     System.out.println("incremented hindLegs to " + hindLegs.getCount());
@@ -40,5 +40,22 @@ class ToeRobot extends Thread {
             }
         }
 
+        synchronized (foreLegs) {
+            if (foreLegs.getCount() < 2) {
+                foreLegs.increment();
+                System.out.println("incremented foreLegs to " + foreLegs.getCount());
+                if (foreLegs.getCount() >= 2)
+                    foreLegs.notify();
+            }
+        }
+        synchronized (hindLegs) {
+            if (hindLegs.getCount() < 2) {
+                hindLegs.increment();
+                System.out.println("incremented hindLegs to " + hindLegs.getCount());
+                if (hindLegs.getCount() >= 2)
+                    hindLegs.notify();
+            }
+        }
     }
+
 }

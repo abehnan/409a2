@@ -59,7 +59,7 @@ class StarThread extends Thread {
             }
 
             // modify that vertex's coordinates
-            // code for finding a random point in a triangle was found on stackoverflow
+            // code for finding a random point in a triangle was found produceCats stackoverflow
             // source: https://stackoverflow.com/questions/19654251/random-point-inside-triangle-inside-java
             double r1 = rng.nextDouble();
             double r2 = rng.nextDouble();
