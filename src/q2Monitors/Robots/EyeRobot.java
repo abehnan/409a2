@@ -1,8 +1,11 @@
-package q2;
+package q2Monitors.Robots;
+
+import q2Monitors.CatMaker;
+import q2Monitors.FiniteBin;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-class EyeRobot extends Thread {
+public class EyeRobot extends Robot {
     private final Object heads = CatMaker.getHeads();
     private final Object eyes = CatMaker.getEyes();
     private final FiniteBin headsWithEyes = CatMaker.getHeadsWithEyes();
@@ -36,11 +39,7 @@ class EyeRobot extends Thread {
                     System.out.println("incremented headsWithEyes to " + headsWithEyes.getCount());
                 }
             }
-            try {
-                Thread.sleep(ThreadLocalRandom.current().nextLong(10, 30));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            work(ThreadLocalRandom.current().nextLong(10, 30));
         }
     }
 }

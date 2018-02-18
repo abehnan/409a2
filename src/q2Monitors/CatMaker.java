@@ -1,7 +1,11 @@
-package q2;
+package q2Monitors;
 
-class CatMaker {
-    static volatile boolean produceCats = true;
+import q2Monitors.Robots.*;
+
+import java.util.ArrayList;
+
+public class CatMaker {
+    public static volatile boolean produceCats = true;
     private static final int limit = 250;
 
     // our infinite bins
@@ -37,6 +41,7 @@ class CatMaker {
         WhiskerRobot whiskerRobot2 = new WhiskerRobot();
         CatRobot catRobot = new CatRobot();
 
+        long startTime = System.currentTimeMillis();
         toeRobot1.start();
         toeRobot2.start();
         legRobot1.start();
@@ -50,9 +55,50 @@ class CatMaker {
         catRobot.start();
 
         try {
+            toeRobot1.join();
+            toeRobot2.join();
+            legRobot1.join();
+            legRobot2.join();
+            tailRobot1.join();
+            tailRobot2.join();
+            eyeRobot1.join();
+            eyeRobot2.join();
+            whiskerRobot1.join();
+            whiskerRobot2.join();
             catRobot.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+        long totalTime = System.currentTimeMillis() - startTime;
+
+        // output
+        ArrayList<Robot> robots = new ArrayList<>();
+        robots.add(toeRobot1);
+        robots.add(toeRobot2);
+        robots.add(legRobot1);
+        robots.add(legRobot2);
+        robots.add(tailRobot1);
+        robots.add(eyeRobot1);
+        robots.add(eyeRobot2);
+        robots.add(whiskerRobot1);
+        robots.add(whiskerRobot2);
+        robots.add(catRobot);
+        printOutput(robots, totalTime);
+
+    }
+
+    public static void printOutput(ArrayList<Robot> robots, long totalTime) {
+        System.out.println("\n\ntotalTime (ms), " + totalTime);
+        System.out.println("Name, Time \"Working\" (thread sleeping), Time Idle (thread active), % Working, % Idle");
+        float percent;
+        for (Robot r : robots) {
+            System.out.print(r.getClass().getName() + ", " );
+            System.out.print(r.getTimeSpentWorking() + ", ");
+            System.out.print(totalTime - r.getTimeSpentWorking() + ", ");
+            percent = r.getTimeSpentWorking() / (float)totalTime * 100;
+            System.out.print(String.format("%.0f%%",percent) + ", ");
+            percent = (totalTime - r.getTimeSpentWorking()) / (float)totalTime * 100;
+            System.out.print(String.format("%.0f%%",percent) + "\n");
         }
     }
 

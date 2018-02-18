@@ -1,8 +1,11 @@
-package q2;
+package q2Monitors.Robots;
+
+import q2Monitors.CatMaker;
+import q2Monitors.FiniteBin;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-class CatRobot extends Thread {
+public class CatRobot extends Robot {
     private final FiniteBin fullHeads = CatMaker.getFullHeads();
     private final FiniteBin fullBodies = CatMaker.getFullBodies();
     private final int limit = CatMaker.getLimit();
@@ -34,13 +37,7 @@ class CatRobot extends Thread {
             }
             cats++;
             System.out.println("\n~~~~~~~~ incremented cats to " + cats + " ~~~~~~~~\n");
-
-            try {
-                Thread.sleep(ThreadLocalRandom.current().nextLong(10, 20));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
+            work(ThreadLocalRandom.current().nextLong(10, 20));
         }
         CatMaker.produceCats = false;
     }

@@ -1,8 +1,11 @@
-package q2;
+package q2Monitors.Robots;
+
+import q2Monitors.CatMaker;
+import q2Monitors.FiniteBin;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-class WhiskerRobot extends Thread {
+public class WhiskerRobot extends Robot {
     private final Object heads = CatMaker.getHeads();
     private final Object whiskers = CatMaker.getWhiskers();
     private final FiniteBin headsWithEyes = CatMaker.getHeadsWithEyes();
@@ -39,11 +42,8 @@ class WhiskerRobot extends Thread {
                     }
                 }
             }
-            try {
-                Thread.sleep(ThreadLocalRandom.current().nextLong(20, 60));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            work(ThreadLocalRandom.current().nextLong(20, 60));
+
         }
     }
 }

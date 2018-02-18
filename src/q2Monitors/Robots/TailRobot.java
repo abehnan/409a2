@@ -1,8 +1,11 @@
-package q2;
+package q2Monitors.Robots;
+
+import q2Monitors.CatMaker;
+import q2Monitors.FiniteBin;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-class TailRobot extends Thread {
+public class TailRobot extends Robot {
     private final Object bodies = CatMaker.getBodies();
     private final FiniteBin bodiesWithLegs = CatMaker.getBodiesWithLegs();
     private final FiniteBin bodiesWithTails = CatMaker.getBodiesWithTails();
@@ -37,11 +40,8 @@ class TailRobot extends Thread {
                     System.out.println("incremented bodiesWithTails to " + bodiesWithTails.getCount());
                 }
             }
-            try {
-                Thread.sleep(ThreadLocalRandom.current().nextLong(10, 20));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            work(ThreadLocalRandom.current().nextLong(10, 20));
+
         }
     }
 
