@@ -87,7 +87,7 @@ public class CatMaker {
 
     }
 
-    public static void printOutput(ArrayList<Robot> robots, long totalTime) {
+    private static void printOutput(ArrayList<Robot> robots, long totalTime) {
         System.out.println("\n\ntotalTime (ms), " + totalTime);
         System.out.println("Name, Time \"Working\" (thread sleeping), Time Idle (thread active), % Working, % Idle");
         float percent;
