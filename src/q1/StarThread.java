@@ -2,13 +2,12 @@ package q1;
 
 import java.text.DecimalFormat;
 import java.util.LinkedList;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.ReentrantLock;
 
 class StarThread extends Thread {
     private final int c;
     private static final LinkedList<Vertex> polygon = Star.getPolygon();
-    private final Random rng = new Random();
     private int count = 0;
     private static final DecimalFormat numberFormat = new DecimalFormat("0.0000");
     private static final ReentrantLock[] locks = {
@@ -29,8 +28,7 @@ class StarThread extends Thread {
 
             Vertex A, B, C;
 
-            // choose a random vertex from polygon
-            int index = rng.nextInt(polygon.size());
+            int index = ThreadLocalRandom.current().nextInt(polygon.size());
             A = polygon.get(index);
 
             // get references, acquire locks in order by locking the lowest index one first
@@ -61,8 +59,8 @@ class StarThread extends Thread {
             // modify that vertex's coordinates
             // code for finding a random point in a triangle was found produceCats stackoverflow
             // source: https://stackoverflow.com/questions/19654251/random-point-inside-triangle-inside-java
-            double r1 = rng.nextDouble();
-            double r2 = rng.nextDouble();
+            double r1 = ThreadLocalRandom.current().nextDouble();
+            double r2 = ThreadLocalRandom.current().nextDouble();
             double x =
                     (1 - Math.sqrt(r1)) * A.getX() +
                     (Math.sqrt(r1) * (1 - r2)) * B.getX() +
