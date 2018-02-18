@@ -1,8 +1,8 @@
 package q2;
 
 class CatMaker {
-    public static boolean on = true;
-    private static final int limit = 250;
+    public static volatile boolean on = true;
+    private static final int limit = 25;
 
     // our infinite bins
     private static final Object legs = new Object();
@@ -22,6 +22,45 @@ class CatMaker {
     private static final FiniteBin bodiesWithLegs = new FiniteBin();
     private static final FiniteBin fullBodies = new FiniteBin();
     private static final FiniteBin fullHeads = new FiniteBin();
+
+    public static void main(String args[]) {
+
+        ToeRobot toeRobot1 = new ToeRobot();
+        ToeRobot toeRobot2 = new ToeRobot();
+        LegRobot legRobot1 = new LegRobot();
+        LegRobot legRobot2 = new LegRobot();
+        TailRobot tailRobot1 = new TailRobot();
+        TailRobot tailRobot2 = new TailRobot();
+        EyeRobot eyeRobot1 = new EyeRobot();
+        EyeRobot eyeRobot2 = new EyeRobot();
+        WhiskerRobot whiskerRobot1 = new WhiskerRobot();
+        WhiskerRobot whiskerRobot2 = new WhiskerRobot();
+        CatRobot catRobot = new CatRobot();
+
+        toeRobot1.start();
+        toeRobot2.start();
+        legRobot1.start();
+        legRobot2.start();
+        tailRobot1.start();
+        tailRobot2.start();
+        eyeRobot1.start();
+        eyeRobot2.start();
+        whiskerRobot1.start();
+        whiskerRobot2.start();
+        catRobot.start();
+
+        try {
+            catRobot.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        synchronized (hindLegs) {
+            hindLegs.notifyAll();
+        }
+        synchronized (foreLegs) {
+            foreLegs.notifyAll();
+        }
+    }
 
     public static int getLimit() {
         return limit;
@@ -85,43 +124,5 @@ class CatMaker {
 
     public static FiniteBin getFullHeads() {
         return fullHeads;
-    }
-
-    public static void main(String args[]) {
-
-        ToeRobot toeRobot1 = new ToeRobot();
-        ToeRobot toeRobot2 = new ToeRobot();
-        LegRobot legRobot1 = new LegRobot();
-        LegRobot legRobot2 = new LegRobot();
-        TailRobot tailRobot1 = new TailRobot();
-        TailRobot tailRobot2 = new TailRobot();
-        EyeRobot eyeRobot1 = new EyeRobot();
-        EyeRobot eyeRobot2 = new EyeRobot();
-        WhiskerRobot whiskerRobot1 = new WhiskerRobot();
-        WhiskerRobot whiskerRobot2 = new WhiskerRobot();
-        CatRobot catRobot = new CatRobot();
-
-        toeRobot1.start();
-        toeRobot2.start();
-        legRobot1.start();
-        legRobot2.start();
-        tailRobot1.start();
-        tailRobot2.start();
-        eyeRobot1.start();
-        eyeRobot2.start();
-        whiskerRobot1.start();
-        whiskerRobot2.start();
-        catRobot.start();
-
-        try {
-            catRobot.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        if (legRobot1.getState() == Thread.State.BLOCKED)
-            legRobot1.interrupt();
-        else if (legRobot2.getState() == Thread.State.BLOCKED)
-            legRobot2.interrupt();
     }
 }
