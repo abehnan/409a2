@@ -115,13 +115,13 @@ class CatMaker {
 
         try {
             catRobot.join();
-            if (legRobot1.getState() == Thread.State.BLOCKED)
-                legRobot1.interrupt();
-            else if (legRobot2.getState() == Thread.State.BLOCKED)
-                legRobot2.interrupt();
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        if (legRobot1.getState() == Thread.State.BLOCKED)
+            legRobot1.interrupt();
+        else if (legRobot2.getState() == Thread.State.BLOCKED)
+            legRobot2.interrupt();
     }
 }
