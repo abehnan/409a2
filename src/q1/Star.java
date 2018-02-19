@@ -9,17 +9,34 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 class Star {
-    private static final DecimalFormat numberFormat = new DecimalFormat("0.###E0");
+
     private static final int width = 1920;
     private static final int height = 1080;
+    private static final DecimalFormat numberFormat = new DecimalFormat("0.###E0");
     private static final ArrayList<Vertex> polygon = new ArrayList<>(6);
     private static final BufferedImage img = new BufferedImage(width, height,BufferedImage.TYPE_INT_ARGB);
     private static final Graphics2D g2d = img.createGraphics();
 
+    public static DecimalFormat getNumberFormat() {
+        return numberFormat;
+    }
+
+    public static ArrayList<Vertex> getPolygon() {
+        return polygon;
+    }
+
+    // prints all vertices of the polygon
+    private static void printPolygon() {
+        for (Vertex v : polygon) {
+            System.out.printf("x = %-10s y = %-10s\n", numberFormat.format(v.getX()), numberFormat.format(v.getY()));
+        }
+        System.out.println();
+    }
+
     // updates the vertices before drawing
     private static void updateDrawValues() {
 
-        // align the values with the image
+        // get max/min x, y
         double yMin = polygon.get(0).getY();
         double xMin = polygon.get(0).getX();
         double yMax = polygon.get(0).getY();
@@ -34,6 +51,7 @@ class Star {
             if (polygon.get(i).getX() > xMax)
                 xMax = polygon.get(i).getX();
         }
+        // align vertices so minimum values are 0,0 for x,y
         for (Vertex v : polygon) {
             v.setX(v.getX() - xMin);
             v.setY(v.getY() - yMin);
@@ -49,8 +67,6 @@ class Star {
         double yScaling = (double) height / yDiff;
         double xScaling = (double) width / xDiff;
         double scalingFactor = Math.min(xScaling, yScaling);
-
-
 
         // scale up the vertices
         for (Vertex v : polygon) {
@@ -70,6 +86,8 @@ class Star {
 
     // draws the polygon to the buffered image and outputs to output.png
     private static void draw() {
+
+        // setup
         updateDrawValues();
         g2d.setColor(Color.lightGray);
         g2d.fillRect(0, 0, img.getWidth(), img.getHeight());
@@ -77,24 +95,26 @@ class Star {
         g2d.setColor(Color.darkGray);
         int[] xPoints = new int[6];
         int[] yPoints = new int[6];
-
         for(int i = 0; i < polygon.size(); i++) {
             xPoints[i] = (int) (polygon.get(i).getX());
             yPoints[i] = (int) (polygon.get(i).getY());
         }
 
+        // draw
         g2d.fillPolygon(xPoints, yPoints, 6);
+
         // write out image
+        System.out.print("printing output image... ");
         File output = new File("output.png");
         try {
             ImageIO.write(img, "png", output);
         } catch (IOException e) {
+            System.out.print("failed!\n");
             e.printStackTrace();
         }
-    }
-
-    public static ArrayList<Vertex> getPolygon() {
-        return polygon;
+        finally {
+            System.out.print("done!\n");
+        }
     }
 
     public static void main(String[] args) {
@@ -144,13 +164,5 @@ class Star {
 
         // output
         draw();
-
-    }
-
-    private static void printPolygon() {
-        for (Vertex v : polygon) {
-            System.out.printf("x = %-10s y = %-10s\n", numberFormat.format(v.getX()), numberFormat.format(v.getY()));
-        }
-        System.out.println();
     }
 }
