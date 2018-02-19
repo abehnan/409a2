@@ -1,15 +1,15 @@
 package q1;
 
 import java.text.DecimalFormat;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.ReentrantLock;
 
 class StarThread extends Thread {
     private final int c;
-    private static final LinkedList<Vertex> polygon = Star.getPolygon();
+    private static final ArrayList<Vertex> polygon = Star.getPolygon();
     private int count = 0;
-    private static final DecimalFormat numberFormat = new DecimalFormat("0.0000");
+    private static final DecimalFormat numberFormat = new DecimalFormat("0.###E0");
     private static final ReentrantLock[] locks = {
             new ReentrantLock(),
             new ReentrantLock(),

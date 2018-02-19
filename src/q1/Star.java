@@ -6,13 +6,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 class Star {
-    private static final DecimalFormat numberFormat = new DecimalFormat("0.0000");
+    private static final DecimalFormat numberFormat = new DecimalFormat("0.###E0");
     private static final int width = 1920;
     private static final int height = 1080;
-    private static final LinkedList<Vertex> polygon = new LinkedList<>();
+    private static final ArrayList<Vertex> polygon = new ArrayList<>(6);
     private static final BufferedImage img = new BufferedImage(width, height,BufferedImage.TYPE_INT_ARGB);
     private static final Graphics2D g2d = img.createGraphics();
 
@@ -38,11 +38,10 @@ class Star {
             v.setX(v.getX() - xMin);
             v.setY(v.getY() - yMin);
         }
+
+        // debug
         System.out.println("aligned vertices: ");
-        for (Vertex v : polygon) {
-            System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
-        }
-        System.out.println();
+        printPolygon();
 
         // choose smallest scaling value
         double xDiff = xMax - xMin;
@@ -51,24 +50,22 @@ class Star {
         double xScaling = (double) width / xDiff;
         double scalingFactor = Math.min(xScaling, yScaling);
 
-        // debug
-        System.out.println("xDiff: " + xDiff);
-        System.out.println("yDiff: " + yDiff);
-        System.out.println("xScaling: " + xScaling);
-        System.out.println("yScaling: " + yScaling);
+
 
         // scale up the vertices
         for (Vertex v : polygon) {
             v.setX(v.getX() * scalingFactor);
             v.setY(v.getY() * scalingFactor);
         }
+
         // debug
-        System.out.println("scalingFactor: " + scalingFactor);
+        System.out.println("xDiff: " + numberFormat.format(xDiff));
+        System.out.println("yDiff: " + numberFormat.format(yDiff));
+        System.out.println("xScaling: " + numberFormat.format(xScaling));
+        System.out.println("yScaling: " + numberFormat.format(yScaling));
+        System.out.println("scalingFactor: " + numberFormat.format(scalingFactor));
         System.out.println("\nscaled-up vertices: ");
-        for (Vertex v : polygon) {
-            System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
-        }
-        System.out.println();
+        printPolygon();
     }
 
     // draws the polygon to the buffered image and outputs to output.png
@@ -96,7 +93,7 @@ class Star {
         }
     }
 
-    public static LinkedList<Vertex> getPolygon() {
+    public static ArrayList<Vertex> getPolygon() {
         return polygon;
     }
 
@@ -125,10 +122,7 @@ class Star {
 
         // debug
         System.out.println("initial vertices: ");
-        for (Vertex v : polygon) {
-            System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
-        }
-        System.out.println();
+        printPolygon();
 
         // start and join the threads
         StarThread[] threads = new StarThread[m];
@@ -146,13 +140,17 @@ class Star {
 
         // debug
         System.out.println("\nmodified vertices: ");
-        for (Vertex v : polygon) {
-            System.out.println("x: " + numberFormat.format(v.getX()) + " y: " + numberFormat.format(v.getY()));
-        }
-        System.out.println();
+        printPolygon();
 
         // output
         draw();
 
+    }
+
+    private static void printPolygon() {
+        for (Vertex v : polygon) {
+            System.out.printf("x = %-10s y = %-10s\n", numberFormat.format(v.getX()), numberFormat.format(v.getY()));
+        }
+        System.out.println();
     }
 }

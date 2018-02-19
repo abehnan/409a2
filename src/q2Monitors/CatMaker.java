@@ -1,7 +1,7 @@
 package q2Monitors;
 
 import q2Monitors.Robots.*;
-
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class CatMaker {
@@ -89,16 +89,17 @@ public class CatMaker {
 
     private static void printOutput(ArrayList<Robot> robots, long totalTime) {
         System.out.println("\n\ntotalTime (ms), " + totalTime);
-        System.out.println("Name, Time \"Working\" (thread sleeping), Time Idle (thread active), % Working, % Idle");
+        System.out.println("Name,Time \"Working\" (thread sleeping),Time Idle (thread active),Working %,Idle %");
         float percent;
+        DecimalFormat percentFormat = new DecimalFormat("#0.00");
         for (Robot r : robots) {
-            System.out.print(r.getClass().getName() + ", " );
-            System.out.print(r.getTimeSpentWorking() + ", ");
-            System.out.print(totalTime - r.getTimeSpentWorking() + ", ");
+            System.out.print(r.getClass().getName() + "," );
+            System.out.print(r.getTimeSpentWorking() + ",");
+            System.out.print(totalTime - r.getTimeSpentWorking() + ",");
             percent = r.getTimeSpentWorking() / (float)totalTime * 100;
-            System.out.print(String.format("%.0f%%",percent) + ", ");
+            System.out.print(percentFormat.format(percent) + ",");
             percent = (totalTime - r.getTimeSpentWorking()) / (float)totalTime * 100;
-            System.out.print(String.format("%.0f%%",percent) + "\n");
+            System.out.print(percentFormat.format(percent) + "\n");
         }
     }
 
