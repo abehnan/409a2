@@ -93,15 +93,15 @@ class Star {
         g2d.fillRect(0, 0, img.getWidth(), img.getHeight());
         g2d.setStroke(new BasicStroke(3));
         g2d.setColor(Color.darkGray);
-        int[] xPoints = new int[6];
-        int[] yPoints = new int[6];
+        int[] xPoints = new int[polygon.size()];
+        int[] yPoints = new int[polygon.size()];
         for(int i = 0; i < polygon.size(); i++) {
             xPoints[i] = (int) (polygon.get(i).getX());
             yPoints[i] = (int) (polygon.get(i).getY());
         }
 
         // draw
-        g2d.fillPolygon(xPoints, yPoints, 6);
+        g2d.fillPolygon(xPoints, yPoints, polygon.size());
 
         // write out image
         System.out.print("printing output image... ");
