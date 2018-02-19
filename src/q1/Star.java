@@ -126,7 +126,7 @@ class Star {
             c = Integer.parseInt(args[1]);
             if (m > 6 || m < 1)
                 throw new Exception("m must be an integer between 1 and 6");
-            else if (c < 0)
+            if (c < 0)
                 throw new Exception("c must be a positive integer");
         } catch (Exception e) {
             e.printStackTrace();
