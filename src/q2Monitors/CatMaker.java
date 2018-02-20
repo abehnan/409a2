@@ -78,6 +78,7 @@ public class CatMaker {
         robots.add(legRobot1);
         robots.add(legRobot2);
         robots.add(tailRobot1);
+        robots.add(tailRobot2);
         robots.add(eyeRobot1);
         robots.add(eyeRobot2);
         robots.add(whiskerRobot1);
@@ -86,20 +87,24 @@ public class CatMaker {
         printOutput(robots, totalTime);
 
     }
-
     private static void printOutput(ArrayList<Robot> robots, long totalTime) {
-        System.out.println("\n\ntotalTime (ms), " + totalTime);
-        System.out.println("Name,Time \"Working\" (thread sleeping),Time Idle (thread active),Working %,Idle %");
-        float percent;
+        System.out.println("\n\ntotalTime: " + totalTime + " ms");
         DecimalFormat percentFormat = new DecimalFormat("#0.00");
+        float working, idle;
+        System.out.printf("%-35s %30s %25s\n", "Name", "Working (thread sleeping) %", "Idle (thread active) %");
+        int lineSkip = 0;
         for (Robot r : robots) {
-            System.out.print(r.getClass().getName() + "," );
-            System.out.print(r.getTimeSpentWorking() + ",");
-            System.out.print(totalTime - r.getTimeSpentWorking() + ",");
-            percent = r.getTimeSpentWorking() / (float)totalTime * 100;
-            System.out.print(percentFormat.format(percent) + ",");
-            percent = (totalTime - r.getTimeSpentWorking()) / (float)totalTime * 100;
-            System.out.print(percentFormat.format(percent) + "\n");
+            if (lineSkip % 2 == 0)
+                System.out.println();
+            working = r.getTimeSpentWorking() / (float)totalTime * 100;
+            idle = (totalTime - r.getTimeSpentWorking()) / (float)totalTime * 100;
+            System.out.printf(
+                "%-35s %30s %25s\n",
+                r.getClass().getName(),
+                percentFormat.format(working),
+                percentFormat.format(idle)
+            );
+            lineSkip++;
         }
     }
 
